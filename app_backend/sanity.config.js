@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'default',
   title: 'sanity-next-app',
 
-  projectId: process.env.SANITY_PROJECT_ID,
+  projectId: 'pu2mtx4f',
   dataset: 'production',
 
   plugins: [deskTool(), visionTool()],
