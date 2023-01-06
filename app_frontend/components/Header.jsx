@@ -1,20 +1,22 @@
 import { useState } from "react";
 import Link from "next/link";
-import {MagnifyingGlassIcon} from '@heroicons/react/24/outline';
+import {MagnifyingGlassIcon, PlusIcon} from '@heroicons/react/24/solid';
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [input, setInput] = useState("");
+  const router = useRouter();
 
   const handleSearch = () => {
     console.log(input)
   }
   return (
-    <div className="flex justify-between sm:w-full lg:w-[95%] shadow lg:mx-auto px-3 py-4 rounded">
+    <div className="flex justify-between items-center sm:w-full lg:w-[95%] shadow lg:mx-auto px-3 py-4 rounded">
         <Link href="/" className='flex items-center gap-2'>
-      <h4 className="text-2xl font-bold text-primary">TodoApp</h4>
+      <h4 className="text-2xl font-bold text-primary">NotesApp</h4>
           <img
-            src="https://cdn-icons-png.flaticon.com/128/2387/2387679.png"
-            className="w-10 h-10 rounded-full opacity-85 hover:opacity-90 transition cursor-pointer"
+            src="https://cdn-icons-png.flaticon.com/128/3025/3025547.png"
+            className="w-10 h-10 opacity-85 hover:opacity-90 transition cursor-pointer"
           />
         </Link>
 
@@ -50,6 +52,10 @@ const Header = () => {
           </button>
         </div>
       </div>
+      <span className='bg-indigo-500 hover:bg-indigo-600 rounded-xl hover:rounded-2xl transiton p-4  cursor-pointer' onClick={() => router.push("/create")}>
+      <PlusIcon className='w-6 h-6 text-white' />
+      </span>
+
     </div>
   );
 };

@@ -1,6 +1,6 @@
 export default {
-  name: 'todo',
-  title: 'Todo',
+  name: 'note',
+  title: 'Note',
   type: 'document',
   fields: [
     {
@@ -14,12 +14,17 @@ export default {
       type: 'string',
     },
     {
-      name: 'todoImage',
-      title: 'TodoImage',
+      name: 'noteImage',
+      title: 'Note Image',
       type: 'image',
       options: {
         hotspot: true, // <-- Defaults to false
       },
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'string'
     },
     {
       name: 'user',

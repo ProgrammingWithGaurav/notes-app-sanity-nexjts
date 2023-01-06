@@ -1,8 +1,11 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
+import {useRouter} from 'next/router';
 
-export default function Todo({ title, description }) {
+export default function Todo({ title, description, _id }) {
+  const router = useRouter();
   const [postHovered, setPostHovered] = useState(false);
+
   return (
     <div
       className="max-w-sm relative bg-white border border-gray-200 rounded-lg shadow-md cursor-pointer"
@@ -22,9 +25,12 @@ export default function Todo({ title, description }) {
         className={`absolute flex items-center justify-center opacity-0 text-white top-0 transition-all duration-250 w-full z-[100] ${
           postHovered && "opacity-100 -top-10"
         }`}
+        onClick={() => router.push(`/note/${_id}`)}
+
         style={{ height: "100%" }}
       >
-        <ArrowRightIcon className="w-12 h-12" />
+        <ArrowRightIcon className="w-12 h-12" 
+          />
       </div>
 
       <div className="p-5">

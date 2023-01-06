@@ -1,1 +1,1 @@
-# Nextjs Sanity TODO APP
+# Nextjs Sanity Notes APP
