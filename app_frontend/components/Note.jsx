@@ -2,7 +2,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import {useRouter} from 'next/router';
 
-export default function Note({ title, description, _id, image: {asset: {url}} }) {
+export default function Note({ title, description, _id, category, image: {asset: {url}} }) {
   const router = useRouter();
   const [postHovered, setPostHovered] = useState(false);
 
@@ -12,6 +12,7 @@ export default function Note({ title, description, _id, image: {asset: {url}} })
       onMouseEnter={() => setPostHovered(true)}
       onMouseLeave={() => setPostHovered(false)}
     >
+      
       <a href="#" className="relative">
         <img
           className={`${
@@ -21,6 +22,15 @@ export default function Note({ title, description, _id, image: {asset: {url}} })
           alt="todo photo"
         />
       </a>
+
+      
+      <div
+        className={`absolute flex top-0 left-0 text-sm bg-indigo-600 opacity-60 rounded-r-2xl text-white w-full`}
+
+      >
+        {category}
+      </div>
+
       <div
         className={`absolute flex items-center justify-center opacity-0 text-white top-0 transition-all duration-250 w-full z-[100] ${
           postHovered && "opacity-100 -top-10"

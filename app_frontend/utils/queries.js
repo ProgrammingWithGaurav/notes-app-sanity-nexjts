@@ -8,6 +8,7 @@ export const feedQuery = `*[_type == "note"] | order(_createdAt desc) {
         _id,
         title, 
         description,
+        category,
         postedBy->{
           _id,
           userName,
@@ -46,6 +47,7 @@ export const searchQuery = (searchTerm) => {
               title,
               category,
               description,
+              category,
               postedBy->{
                 _id,
                 userName,

@@ -10,8 +10,9 @@ const Header = () => {
   const {setSearchString}  = useStateContext();
 
   const handleSearch = () => {
+    router.push('/');
     setSearchString(input)
-
+    setInput('');
   }
   return (
     <div className="flex justify-between items-center sm:w-full lg:w-[95%] shadow lg:mx-auto px-3 py-4 rounded">
@@ -48,7 +49,6 @@ const Header = () => {
           <button
             type="submit"
             className="text-primary bg-gray-100 absolute right-2.5 bottom-2.5  hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
-            disabled={input.trim() === ''}
             onClick={() => handleSearch()}
           >
             Search

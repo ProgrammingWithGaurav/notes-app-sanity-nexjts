@@ -87,13 +87,13 @@ const NoteDetail = () => {
             <div className="p-4 border-t border-b md:border md:rounded">
               <div className="flex py-2">
                 <img
-                  src="https://randomuser.me/api/portraits/men/97.jpg"
+                  src={noteDetail?.postedBy?.image}
                   className="h-10 w-10 rounded-full mr-2 object-cover"
                 />
                 <div>
                   <p className="font-semibold text-gray-700 text-sm">
                     {" "}
-                    Mike Sullivan{" "}
+                    {noteDetail?.postedBy?.userName}
                   </p>
                   <p className="font-semibold text-gray-600 text-xs">
                     {" "}
