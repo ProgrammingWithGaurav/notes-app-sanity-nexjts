@@ -1,11 +1,29 @@
 import React, { useEffect, useState } from "react";
-import {
-  CloudArrowDownIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
+import { CloudArrowDownIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Spinner from "../components/Spinner";
+import { client } from "../client";
+import { userQuery } from "../utils/queries";
+
+const categories = [
+  {
+    name: 'Coding & Programming & Tech'
+  },
+  {
+    name : 'Nature & World & Fact'
+  },
+  {
+    name: 'Food Items'
+  },
+  {
+    name: 'Country'
+  },
+  {
+    name: 'Others'
+  }
+
+]
 
 const create = () => {
   const router = useRouter();
@@ -14,15 +32,33 @@ const create = () => {
   const [imageAsset, setImageAsset] = useState();
   const [loading, setLoading] = useState(false);
   const [wrongImageType, setWrongImageType] = useState(false);
-
+  const [category, setCategory] = useState();
+  const [fields, setFields] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [user, setUser] = useState(null);
+  
+  // Fetching user data
   useEffect(() => {
-    const User =
+    const redirect = () => {
+      localStorage.clear(); router.push("/login");
+    }
       localStorage.getItem("user") !== "undefined"
-        ? JSON.parse(localStorage.getItem("user"))
-        : localStorage.clear();
-
-    if (!User) router.push("/login");
+        ? setUserInfo(localStorage.getItem('user'))
+        : redirect();
   }, []);
+
+  
+  useEffect(() => {
+    const query = userQuery(userInfo?.uid);
+
+    client.fetch(query).then((data) => {
+      setUser(data[0]);
+      console.log(data)
+      console.log(userInfo)
+    });
+  }, [userInfo, user]);
+
+  //
 
   const uploadImage = (e) => {
     const selectedFile = e.target.files[0];
@@ -36,10 +72,58 @@ const create = () => {
     ) {
       setWrongImageType(false);
       setLoading(true);
-      setLoading(false)
+      client.assets
+        .upload("image", selectedFile, {
+          contentType: selectedFile.type,
+          filename: selectedFile.name,
+        })
+        .then((document) => {
+          setImageAsset(document);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log("Upload failed:", error.message);
+        });
+      setLoading(false);
     } else {
       setLoading(false);
       setWrongImageType(true);
+    }
+  };
+
+  const saveNote = () => {
+    if (title && description && imageAsset?._id && category) {
+      const doc = {
+        _type: "note",
+        title,
+        description,
+        image: {
+          _type: "image",
+          asset: {
+            _type: "reference",
+            _ref: imageAsset?._id,
+          },
+        },
+        userId: userInfo.uid,
+        user: {
+          _type: "user",
+          _ref: userInfo.uid,
+        },
+        category,
+      };
+      client.create(doc).then(() => {
+        router.push("/");
+      });
+      setLoading(false);
+      setTitle('');
+      setDescription('');
+      setCategory('');
+      setImageAsset(null);
+    } else {
+      setFields(true)
+      setTimeout(() => {
+        setFields(false);
+      }, 2000);
     }
   };
   return (
@@ -54,7 +138,11 @@ const create = () => {
       <div className="heading text-center font-bold text-2xl m-5 text-gray-800">
         New Post
       </div>
-
+      {fields && (
+        <p className="text-red-500 texst-sm text-center">
+          *Please add all filelds
+        </p>
+      )}
       <div className="editor mx-auto w-10/12 flex flex-col text-gray-800 border border-gray-300 p-4 shadow-lg max-w-2xl">
         <input
           className="input"
@@ -70,7 +158,31 @@ const create = () => {
           placeholder="Describe everything about this post here"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
+        />
+
+        <div>
+          <p className="mb-2 font-semibold text:lg sm:text-xl">
+            Choose Pin Category
+          </p>
+          <select
+            onChange={(e) => {
+              setCategory(e.target.value);
+            }}
+            className="outline-none w-4/5 text-base border-b-2 border-gray-200 p-2 rounded-md cursor-pointer"
+          >
+            <option value="others" className="sm:text-bg bg-white">
+              Select Category
+            </option>
+            {categories.map((item) => (
+              <option
+                className="text-base border-0 outline-none capitalize bg-white text-black "
+                value={item.name}
+              >
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div className=" flex lg:flex-row flex-col justify-center items-center bg-white lg:p-5 p-3 lg:w-4/5 ">
           <div className="bg-secondaryColor p-3 flex flex-0.7 w-full">
@@ -83,7 +195,7 @@ const create = () => {
                   <div className="flex flex-col items-center justify-center h-full">
                     <div className="flex flex-col justify-center items-center">
                       <p className="font-bold text-2xl">
-                        <CloudArrowDownIcon className="w-8 h-8 textd-primary"/>
+                        <CloudArrowDownIcon className="w-8 h-8 text-primary" />
                       </p>
                       <p className="text-lg">Click to upload</p>
                     </div>
@@ -112,7 +224,7 @@ const create = () => {
                     className="absolute bottom-3 right-3 p-3 rounded-full bg-white text-xl cursor-pointer outline-none hover:shadow-md transition-all duration-500 ease-in-out"
                     onClick={() => setImageAsset(null)}
                   >
-                    <TrashIcon />
+                    <TrashIcon className="w-4 h-4 text-red-500" />
                   </button>
                 </div>
               )}
@@ -130,8 +242,8 @@ const create = () => {
           >
             Cancel
           </div>
-          <div className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-xl py-1">
-            Post
+          <div onClick={saveNote} className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-xl py-1">
+            {loading ? 'saving...' : 'Post'}
           </div>
         </div>
       </div>

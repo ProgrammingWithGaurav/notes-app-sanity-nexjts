@@ -14,8 +14,8 @@ export default {
       type: 'string',
     },
     {
-      name: 'noteImage',
-      title: 'Note Image',
+      name: 'image',
+      title: 'Image',
       type: 'image',
       options: {
         hotspot: true, // <-- Defaults to false
@@ -27,10 +27,14 @@ export default {
       type: 'string'
     },
     {
-      name: 'user',
-      title: 'User',
-      type: 'reference',
-      to: [{type: 'user'}],
-    },
+      name: 'userId',
+      title: 'UserID', 
+      type: 'string'
+  },
+  {
+      name: 'postedBy',
+      title: 'PostedBy', 
+      type: 'postedBy'
+  },
   ],
 }

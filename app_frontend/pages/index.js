@@ -1,12 +1,16 @@
 import Head from "next/head";
 import Header from "../components/Header";
-import Todo from "../components/Todo";
 import { v4 as uuidv4 } from "uuid";
 import ScrollToTop from "react-scroll-to-top";
 import Masonry from "react-masonry-css";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Spinner from "../components/Spinner";
+import { useStateContext } from "./context/NoteContext";
+import Note from "../components/Note";
+import { useState } from "react";
+import {client} from '../client';
+import { feedQuery, searchQuery } from "../utils/queries";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -17,7 +21,7 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-export const todos = [
+export const notes = [
   {
     title: "learn React",
     description: "learning react js in coding , programming",
@@ -29,12 +33,39 @@ export const todos = [
 
 export default function Home() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const {searchString, setSearchString, setNotes, notes} = useStateContext();
   
   useEffect(() => {
     const User = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
     if (!User) router.push('/login');
   }, []);
+
+  useEffect(() => {
+    if (searchString) {
+      setLoading(true);
+      const query = searchQuery(searchString);
+      client.fetch(query).then((data) => {
+        setNotes(data);
+        console.log(data)
+        setLoading(false);
+      });
+    } else {
+      setLoading(true);
+
+      client.fetch(feedQuery).then((data) => {
+        setNotes(data);
+        console.log(data)
+        setLoading(false);
+      });
+    }
+  }, [searchString]);
+  if (loading) {
+    return (
+      <Spinner />
+    );
+  }
   return (
     <>
       <Head>
@@ -45,14 +76,16 @@ export default function Home() {
       </Head>
       <div>
         <Header />
+        {loading && <Spinner />}
 
-        {!todos && <Spinner />}
+        {notes.length === 0 && <p className='text-3xl text-gray-900 text-center my-4'>No Notes Found</p>}
+
         <Masonry
           className="flex justify-between gap-2 sm:w-full lg:w-[95%] lg:mx-auto px-3 py-4 rounded"
           breakpointCols={breakpointColumnsObj}
         >
-          {todos.map((todo) => (
-            <Todo key={todo._id} {...todo} />
+          {notes && notes.map((note) => (
+            <Note key={note._id} {...note} />
           ))}
 
           <ScrollToTop smooth />

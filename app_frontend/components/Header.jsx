@@ -2,13 +2,16 @@ import { useState } from "react";
 import Link from "next/link";
 import {MagnifyingGlassIcon, PlusIcon} from '@heroicons/react/24/solid';
 import { useRouter } from "next/router";
+import { useStateContext } from "../pages/context/NoteContext";
 
 const Header = () => {
   const [input, setInput] = useState("");
   const router = useRouter();
+  const {setSearchString}  = useStateContext();
 
   const handleSearch = () => {
-    console.log(input)
+    setSearchString(input)
+
   }
   return (
     <div className="flex justify-between items-center sm:w-full lg:w-[95%] shadow lg:mx-auto px-3 py-4 rounded">

@@ -2,7 +2,7 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import {useRouter} from 'next/router';
 
-export default function Todo({ title, description, _id }) {
+export default function Note({ title, description, _id, image: {asset: {url}} }) {
   const router = useRouter();
   const [postHovered, setPostHovered] = useState(false);
 
@@ -17,7 +17,7 @@ export default function Todo({ title, description, _id }) {
           className={`${
             postHovered && "opacity-70"
           } rounded-t-lg group transition`}
-          src="https://source.unsplash.com/1600x900/?nature,photography,technology"
+          src={url}
           alt="todo photo"
         />
       </a>
