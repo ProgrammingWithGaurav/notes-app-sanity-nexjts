@@ -1,31 +1,33 @@
 import { useState } from "react";
 import Link from "next/link";
-import {MagnifyingGlassIcon, PlusIcon} from '@heroicons/react/24/solid';
+import { BookmarkIcon, MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useStateContext } from "../pages/context/NoteContext";
+import {signOut} from 'firebase/auth';
+import {auth} from '../firebase';
+import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
 
 const Header = () => {
   const [input, setInput] = useState("");
   const router = useRouter();
-  const {setSearchString}  = useStateContext();
+  const { setSearchString } = useStateContext();
 
   const handleSearch = () => {
-    router.push('/');
-    setSearchString(input)
-    setInput('');
-  }
+    router.push("/");
+    setSearchString(input);
+    setInput("");
+  };
   return (
     <div className="flex justify-between items-center sm:w-full lg:w-[95%] shadow lg:mx-auto px-3 py-4 rounded">
-        <Link href="/" className='flex items-center gap-2'>
-      <h4 className="text-2xl font-bold text-primary">NotesApp</h4>
-          <img
-            src="https://cdn-icons-png.flaticon.com/128/3025/3025547.png"
-            className="w-10 h-10 opacity-85 hover:opacity-90 transition cursor-pointer"
-          />
-        </Link>
+      <Link href="/" className="flex items-center gap-2">
+        <h4 className="text-2xl font-bold text-primary">NotesApp</h4>
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/3025/3025547.png"
+          className="w-10 h-10 opacity-85 hover:opacity-90 transition cursor-pointer"
+        />
+      </Link>
 
       <div>
-
         <label
           for="default-search"
           className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -34,9 +36,7 @@ const Header = () => {
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-           
-           <MagnifyingGlassIcon
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"/>
+            <MagnifyingGlassIcon className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </div>
           <input
             type="search"
@@ -55,10 +55,32 @@ const Header = () => {
           </button>
         </div>
       </div>
-      <span className='bg-indigo-500 hover:bg-indigo-600 rounded-xl hover:rounded-2xl transiton p-4  cursor-pointer' onClick={() => router.push("/create")}>
-      <PlusIcon className='w-6 h-6 text-white' />
+      <div className="flex items-center gap-2">
+      <span
+        className="bg-purple-500 hover:shadow-md hover:bg-purple-600 rounded-xl hover:rounded-2xl transiton p-4  cursor-pointer"
+        onClick={() => router.push("/bookmarks")}
+      >
+        <BookmarkIcon className="w-6 h-6 text-white" />
       </span>
 
+      <span
+        className="bg-indigo-500 hover:shadow-sm hover:bg-indigo-600 rounded-xl hover:rounded-2xl transiton p-4  cursor-pointer"
+        onClick={() => router.push("/create")}
+      >
+        <PlusIcon className="w-6 h-6 text-white" />
+      </span>
+
+      <span
+        className="bg-violet-500 hover:shadow-sm hover:bg-violet-600 rounded-xl hover:rounded-2xl transiton p-4  cursor-pointer"
+        onClick={() => {
+          localStorage.clear();
+          signOut(auth)
+          router.push('/login');
+        }}
+      >
+        <ArrowLeftOnRectangleIcon className="w-6 h-6 text-white" />
+      </span>
+    </div>
     </div>
   );
 };

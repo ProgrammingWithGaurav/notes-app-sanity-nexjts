@@ -11,15 +11,12 @@ import { pinDetailQuery } from "../../utils/queries";
 import { client } from "../../client";
 
 const NoteDetail = () => {
-  const [noteId, setNoteId] = useState(null);
-  const router = useRouter();
-
   const {
     query: { NoteDetail: note_id },
   } = useRouter();
+  const router = useRouter();
+
   const [noteDetail, setNoteDetail] = useState(null);
-  const [comment, setComment] = useState("");
-  const [addingComment, setAddingComment] = useState(false);
 
   useEffect(() => {
     const User =
@@ -31,8 +28,7 @@ const NoteDetail = () => {
   }, []);
 
   const fetchNoteDetails = () => {
-    const query = pinDetailQuery('34dcfe89-a53d-4936-8540-c7abb787962c');
-
+    const query = pinDetailQuery(note_id);
     if (query) {
       client.fetch(query).then((data) => {
         setNoteDetail(data[0]);
@@ -42,8 +38,9 @@ const NoteDetail = () => {
   };
 
   useEffect(() => {
-    fetchNoteDetails();
-  }, [noteId]);
+     fetchNoteDetails();
+    console.log(note_id)
+  }, [note_id]);
 
   return (
     <div className="max-w-screen-lg mx-auto">

@@ -1,10 +1,13 @@
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, BookmarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import {useRouter} from 'next/router';
+import {BookmarkIcon as ActiveBookMarkIcon} from '@heroicons/react/24/solid';
 
 export default function Note({ title, description, _id, category, image: {asset: {url}} }) {
   const router = useRouter();
   const [postHovered, setPostHovered] = useState(false);
+
+  const isBookMarked = true;
 
   return (
     <div
@@ -25,10 +28,20 @@ export default function Note({ title, description, _id, category, image: {asset:
 
       
       <div
-        className={`absolute flex top-0 left-0 text-sm bg-indigo-600 opacity-60 rounded-r-2xl text-white w-full`}
+        className={`items-center mx-2 p-2 justify-between absolute flex top-0 left-0 text-sm bg-indigo-600 opacity-60 rounded-2xl text-white w-full`}
 
       >
+        <span>
         {category}
+        </span>
+
+{isBookMarked ? 
+          <ActiveBookMarkIcon className='w-6 h-6 '/>
+          : 
+          
+          <BookmarkIcon className='w-6 h-6'/>
+}
+
       </div>
 
       <div

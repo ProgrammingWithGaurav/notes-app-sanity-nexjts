@@ -3,7 +3,7 @@ import RotateLoader from "react-spinners/RotateLoader";
 
 function Spinner({ message }) {
   return (
-    <div className="flex flex-col justify-center items-center z-[2000] bg-gray-200 h-screen w-full">
+    <div className="flex flex-col justify-center items-center z-[2000] bg-gray-200  h-screen w-full">
      
      <RotateLoader
         color={'blue'}

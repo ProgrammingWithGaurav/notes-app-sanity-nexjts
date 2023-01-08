@@ -5,25 +5,25 @@ import { useRouter } from "next/router";
 import Spinner from "../components/Spinner";
 import { client } from "../client";
 import { userQuery } from "../utils/queries";
+import Header from "../components/Header";
 
 const categories = [
   {
-    name: 'Coding & Programming & Tech'
+    name: "Coding & Programming & Tech",
   },
   {
-    name : 'Nature & World & Fact'
+    name: "Nature & World & Fact",
   },
   {
-    name: 'Food Items'
+    name: "Food Items",
   },
   {
-    name: 'Country'
+    name: "Country",
   },
   {
-    name: 'Others'
-  }
-
-]
+    name: "Others",
+  },
+];
 
 const create = () => {
   const router = useRouter();
@@ -36,25 +36,25 @@ const create = () => {
   const [fields, setFields] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [user, setUser] = useState(null);
-  
+
   // Fetching user data
   useEffect(() => {
     const redirect = () => {
-      localStorage.clear(); router.push("/login");
-    }
-      localStorage.getItem("user") !== "undefined"
-        ? setUserInfo(localStorage.getItem('user'))
-        : redirect();
+      localStorage.clear();
+      router.push("/login");
+    };
+    localStorage.getItem("user") !== "undefined"
+      ? setUserInfo(JSON.parse(localStorage.getItem("user")))
+      : redirect();
   }, []);
 
-  
   useEffect(() => {
     const query = userQuery(userInfo?.uid);
 
     client.fetch(query).then((data) => {
       setUser(data[0]);
-      console.log(data)
-      console.log(userInfo)
+      console.log(data);
+      console.log(userInfo);
     });
   }, [userInfo, user]);
 
@@ -105,22 +105,22 @@ const create = () => {
           },
         },
         userId: userInfo.uid,
-        user: {
+        postedBy: {
           _type: "user",
           _ref: userInfo.uid,
         },
         category,
       };
       client.create(doc).then(() => {
+        setLoading(false);
+        setTitle("");
+        setDescription("");
+        setCategory("");
+        setImageAsset(null);
         router.push("/");
       });
-      setLoading(false);
-      setTitle('');
-      setDescription('');
-      setCategory('');
-      setImageAsset(null);
     } else {
-      setFields(true)
+      setFields(true);
       setTimeout(() => {
         setFields(false);
       }, 2000);
@@ -134,7 +134,7 @@ const create = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
+      <Header />
       <div className="heading text-center font-bold text-2xl m-5 text-gray-800">
         New Post
       </div>
@@ -242,8 +242,11 @@ const create = () => {
           >
             Cancel
           </div>
-          <div onClick={saveNote} className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-xl py-1">
-            {loading ? 'saving...' : 'Post'}
+          <div
+            onClick={saveNote}
+            className="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500 hover:bg-indigo-600 rounded-lg text-xl py-1"
+          >
+            {loading ? "saving..." : "Post"}
           </div>
         </div>
       </div>

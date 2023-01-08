@@ -1,5 +1,5 @@
-
-export const feedQuery = `*[_type == "note"] | order(_createdAt desc) {
+export const feedQuery = (userId) => {
+  const query = `*[_type == "note" && userId == "${userId}"] | order(_createdAt desc) {
     image{
       asset->{
         url
@@ -15,7 +15,8 @@ export const feedQuery = `*[_type == "note"] | order(_createdAt desc) {
           image
         }
       } `;
-
+  return query;
+};
 export const pinDetailQuery = (pinId) => {
   const query = `*[_type == "note" && _id == '${pinId}']{
       image{
@@ -37,7 +38,7 @@ export const pinDetailQuery = (pinId) => {
 };
 
 export const searchQuery = (searchTerm) => {
-  const query = `*[_type == "note" && title match '${searchTerm}*' || category match '${searchTerm}*' || about match '${searchTerm}*']{
+  const query = `*[_type == "note"  && title match '${searchTerm}*' || description match '${searchTerm}*' || category match '${searchTerm}*']{
           image{
             asset->{
               url
