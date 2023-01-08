@@ -67,6 +67,7 @@ export default function Home() {
       });
     }
   }, [searchString]);
+
   if (loading) {
     return <Spinner />;
   }

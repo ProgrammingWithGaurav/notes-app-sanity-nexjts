@@ -12,6 +12,12 @@ export default {
             name: 'image',
             title: 'Image',
             type: 'string'
-        }
+        },         
+        {
+          name: 'bookmark',
+          title: 'BookMark', 
+          type: 'array',
+          of: [{type: 'bookmark'}]
+      },
     ]
 }

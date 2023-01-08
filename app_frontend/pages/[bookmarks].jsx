@@ -10,7 +10,7 @@ import { useStateContext } from "./context/NoteContext";
 import Note from "../components/Note";
 import { useState } from "react";
 import {client} from '../client';
-import { feedQuery, searchQuery } from "../utils/queries";
+import { feedQuery, searchQuery, userQuery } from "../utils/queries";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -43,25 +43,14 @@ export default function Home() {
   }, []);
 
 
-  useEffect(() => {
-    if (searchString) {
-      setLoading(true);
-      const query = searchQuery(searchString);
-      client.fetch(query).then((data) => {
-        setNotes(data);
-        console.log(data)
-        setLoading(false);
-      });
-    } else {
-      setLoading(true);
-
-      client.fetch(feedQuery).then((data) => {
-        setNotes(data);
-        console.log(data)
-        setLoading(false);
-      });
-    }
-  }, [searchString]);
+  // useEffect(() => {;
+  //   const query = userQuery(JSON.parse(localStorage.getItem('user')).uid)
+  //     client.fetch(userQuery).then((data) => {
+  //       // setNotes(data);
+  //       console.log(data[0])
+  //       setLoading(false);
+  //     });
+  // }, []);
   if (loading) {
     return (
       <Spinner />
@@ -79,7 +68,7 @@ export default function Home() {
         <Header />
         {loading && <Spinner />}
 
-        {notes.length === 0 && <p className='text-3xl text-gray-900 text-center my-4'>No Notes Found</p>}
+        {notes.length === 0 && <p className='text-3xl text-gray-900 text-center my-4'>No Bookmark Notes Found</p>}
 
         <Masonry
           className="flex justify-between gap-2 sm:w-full lg:w-[95%] lg:mx-auto px-3 py-4 rounded"
