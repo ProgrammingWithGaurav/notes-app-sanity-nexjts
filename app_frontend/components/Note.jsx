@@ -1,11 +1,29 @@
 import { ArrowRightIcon, BookmarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import {useRouter} from 'next/router';
-import {BookmarkIcon as ActiveBookMarkIcon} from '@heroicons/react/24/solid';
+import { useRouter } from "next/router";
+import { client } from "../client";
+import {
+  BookmarkIcon as ActiveBookMarkIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 
-export default function Note({ title, description, _id, category, image: {asset: {url}} }) {
+export default function Note({
+  title,
+  description,
+  _id,
+  category,
+  image: {
+    asset: { url },
+  },
+}) {
   const router = useRouter();
   const [postHovered, setPostHovered] = useState(false);
+
+  const deleteNote = () => {
+    client.delete(_id).then(() => {
+      window.location.reload();
+    });
+  };
 
   const isBookMarked = true;
 
@@ -15,7 +33,6 @@ export default function Note({ title, description, _id, category, image: {asset:
       onMouseEnter={() => setPostHovered(true)}
       onMouseLeave={() => setPostHovered(false)}
     >
-      
       <a href="#" className="relative">
         <img
           className={`${
@@ -26,22 +43,12 @@ export default function Note({ title, description, _id, category, image: {asset:
         />
       </a>
 
-      
       <div
-        className={`items-center mx-2 p-2 justify-between absolute flex top-0 left-0 text-sm bg-indigo-600 opacity-60 rounded-2xl text-white w-full`}
-
+        className={`items-center mx-2 p-1 justify-between absolute flex top-0 left-0 text-sm bg-indigo-600 opacity-0 transition rounded-2xl text-white w-full ${
+          postHovered && "opacity-80"
+        }`}
       >
-        <span>
-        {category}
-        </span>
-
-{isBookMarked ? 
-          <ActiveBookMarkIcon className='w-6 h-6 '/>
-          : 
-          
-          <BookmarkIcon className='w-6 h-6'/>
-}
-
+        <span>{category}</span>
       </div>
 
       <div
@@ -49,11 +56,9 @@ export default function Note({ title, description, _id, category, image: {asset:
           postHovered && "opacity-100 -top-10"
         }`}
         onClick={() => router.push(`/note/${_id}`)}
-
         style={{ height: "100%" }}
       >
-        <ArrowRightIcon className="w-12 h-12" 
-          />
+        <ArrowRightIcon className="w-12 h-12" />
       </div>
 
       <div className="p-5">
@@ -67,6 +72,18 @@ export default function Note({ title, description, _id, category, image: {asset:
             ? `${description.slice(0, 20)}...`
             : description}
         </p>
+
+<div className='flex items-center justify-between'>
+        {isBookMarked ? (
+          <ActiveBookMarkIcon className="w-6 h-6 text-gray-600" />
+        ) : (
+          <BookmarkIcon className="w-6 h-6" />
+        )}
+        <TrashIcon
+          className="w-6 h-6 text-red-400 hover:opacity-80"
+          onClick={deleteNote}
+        />
+      </div>
       </div>
     </div>
   );
