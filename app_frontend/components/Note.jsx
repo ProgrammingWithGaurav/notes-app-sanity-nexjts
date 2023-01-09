@@ -2,6 +2,7 @@ import { ArrowRightIcon, BookmarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { client } from "../client";
+import { useStateContext } from "../pages/context/NoteContext";
 import {
   BookmarkIcon as ActiveBookMarkIcon,
   TrashIcon,
@@ -15,17 +16,31 @@ export default function Note({
   image: {
     asset: { url },
   },
+  bookmark,
 }) {
   const router = useRouter();
+  const { notes, setNotes ,loading, setLoading} = useStateContext();
   const [postHovered, setPostHovered] = useState(false);
-
+  const [isBookmark, setIsBookmark] = useState(bookmark);
   const deleteNote = () => {
     client.delete(_id).then(() => {
       window.location.reload();
     });
   };
 
-  const isBookMarked = true;
+  const bookmarkNote = () => {
+    setLoading(true);
+      client
+        .patch(_id) // Document ID to patch
+        .set({ bookmark: !bookmark }) // Shallow merge
+        .commit() // Perform the patch and return a promise
+        .then((updatedNote) => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.error("Oh no, the update failed: ", err.message);
+        });
+  };
 
   return (
     <div
@@ -73,17 +88,20 @@ export default function Note({
             : description}
         </p>
 
-<div className='flex items-center justify-between'>
-        {isBookMarked ? (
-          <ActiveBookMarkIcon className="w-6 h-6 text-gray-600" />
-        ) : (
-          <BookmarkIcon className="w-6 h-6" />
-        )}
-        <TrashIcon
-          className="w-6 h-6 text-red-400 hover:opacity-80"
-          onClick={deleteNote}
-        />
-      </div>
+        <div className="flex items-center justify-between">
+          {isBookmark ? (
+            <ActiveBookMarkIcon
+              className="w-6 h-6 text-gray-600"
+              onClick={bookmarkNote}
+            />
+          ) : (
+            <BookmarkIcon className="w-6 h-6" onClick={bookmarkNote} />
+          )}
+          <TrashIcon
+            className="w-6 h-6 text-red-400 hover:opacity-80"
+            onClick={deleteNote}
+          />
+        </div>
       </div>
     </div>
   );

@@ -21,21 +21,9 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-export const notes = [
-  {
-    title: "learn React",
-    description: "learning react js in coding , programming",
-    _id: uuidv4(),
-    type: "coding",
-    noteImage:
-      "https://images.unsplash.com/photo-1499078265944-8f1ee6f177a9?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=900&ixid=MnwxfDB8MXxyYW5kb218MHx8bmF0dXJlLHBob3RvZ3JhcGh5LHRlY2hub2xvZ3l8fHx8fHwxNjcyOTcwODM3&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1600",
-  },
-];
-
 export default function Home() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const { searchString, setSearchString, setNotes, notes } = useStateContext();
+  const { searchString, setSearchString, setNotes, notes, loading, setLoading } = useStateContext();
 
   useEffect(() => {
     const User =

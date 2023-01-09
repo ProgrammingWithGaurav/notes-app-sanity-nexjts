@@ -5,10 +5,12 @@ export const feedQuery = (userId) => {
         url
       }
     },
+    _createdAt,
         _id,
         title, 
         description,
         category,
+        bookmark,
         postedBy->{
           _id,
           userName,
@@ -17,7 +19,7 @@ export const feedQuery = (userId) => {
       } `;
   return query;
 };
-export const pinDetailQuery = (pinId) => {
+export const noteDetailQuery = (pinId) => {
   const query = `*[_type == "note" && _id == '${pinId}']{
       image{
         asset->{
@@ -25,7 +27,9 @@ export const pinDetailQuery = (pinId) => {
         }
       },
       _id,
+      _createdAt,
       title, 
+      bookmark,
       description,
       category,
       postedBy->{
@@ -45,10 +49,36 @@ export const searchQuery = (searchTerm) => {
             }
           },
               _id,
+              _createdAt,
               title,
+              bookmark,
               category,
               description,
               category,
+              postedBy->{
+                _id,
+                userName,
+                image
+              },
+            }`;
+  return query;
+};
+
+
+export const bookmarkQuery = (userId) => {
+  const query = `*[_type == "note" && userId == '${userId}' && bookmark == true]{
+          image{
+            asset->{
+              url
+            }
+          },
+              _id,
+              title,
+              category,
+              _createdAt,
+              description,
+              category,
+              bookmark,
               postedBy->{
                 _id,
                 userName,

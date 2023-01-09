@@ -2,12 +2,11 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import ScrollToTop from "react-scroll-to-top";
-import { todos } from "../index";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Footer from "../../components/Footer";
 import Head from "next/head";
 import Spinner from "../../components/Spinner";
-import { pinDetailQuery } from "../../utils/queries";
+import { noteDetailQuery } from "../../utils/queries";
 import { client } from "../../client";
 
 const NoteDetail = () => {
@@ -28,7 +27,7 @@ const NoteDetail = () => {
   }, []);
 
   const fetchNoteDetails = () => {
-    const query = pinDetailQuery(note_id);
+    const query = noteDetailQuery(note_id);
     if (query) {
       client.fetch(query).then((data) => {
         setNoteDetail(data[0]);
@@ -64,7 +63,7 @@ const NoteDetail = () => {
               href="#"
               className="py-2 text-green-700 inline-flex items-center justify-center mb-2 font-semibold"
             >
-              {noteDetail?.type}
+              {noteDetail?.category}
             </a>
           </div>
 
@@ -99,8 +98,7 @@ const NoteDetail = () => {
                 </div>
               </div>
               <p className="text-gray-700 py-3">
-                Mike writes about technology Yourself required no at thoughts
-                delicate landlord it be. Branched dashwood do is whatever it.
+                {noteDetail?.postedBy?.userName} writes about {noteDetail?.category}.
               </p>
               <button className="px-2 py-1 text-gray-100 bg-green-700 flex w-full items-center justify-center rounded">
                 Follow
@@ -110,9 +108,11 @@ const NoteDetail = () => {
           </div>
         </div>
       </main>
+    <p className="text-primary font-bold text-sm text-center">Created on {new Date(noteDetail?._createdAt).toLocaleString()}</p>
       <Footer />
 
       <ScrollToTop smooth />
+
     </div>
   );
 };

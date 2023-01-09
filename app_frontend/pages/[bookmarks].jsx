@@ -10,7 +10,7 @@ import { useStateContext } from "./context/NoteContext";
 import Note from "../components/Note";
 import { useState } from "react";
 import {client} from '../client';
-import { feedQuery, searchQuery, userQuery } from "../utils/queries";
+import { bookmarkQuery, searchQuery } from "../utils/queries";
 
 const breakpointColumnsObj = {
   default: 4,
@@ -35,6 +35,7 @@ export default function Home() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const {searchString, setSearchString, setNotes, notes} = useStateContext();
+  const [bookmarks, setBookmarks] = useState();
   
   useEffect(() => {
       const User = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
@@ -43,14 +44,26 @@ export default function Home() {
   }, []);
 
 
-  // useEffect(() => {;
-  //   const query = userQuery(JSON.parse(localStorage.getItem('user')).uid)
-  //     client.fetch(userQuery).then((data) => {
-  //       // setNotes(data);
-  //       console.log(data[0])
-  //       setLoading(false);
-  //     });
-  // }, []);
+  useEffect(() => {;
+    if (searchString) {
+      setLoading(true);
+      const query = searchQuery(searchString, JSON.parse(localStorage.getItem('user'))?.uid);
+      console.log(query)
+      client.fetch(query).then((data) => {
+        setNotes(data.filter(item => item?.postedBy?._id === JSON.parse(localStorage.getItem('user'))?.uid)
+        );
+
+        setLoading(false);
+      });
+    } else {
+    const query = bookmarkQuery(JSON.parse(localStorage.getItem('user')).uid)
+      client.fetch(query).then((data) => {
+        setBookmarks(data);
+        console.log(data[0])
+        setLoading(false);
+      });
+    }
+  }, []);
   if (loading) {
     return (
       <Spinner />
@@ -68,13 +81,13 @@ export default function Home() {
         <Header />
         {loading && <Spinner />}
 
-        {notes.length === 0 && <p className='text-3xl text-gray-900 text-center my-4'>No Bookmark Notes Found</p>}
+        {bookmarks?.length === 0 && <p className='text-3xl text-gray-900 text-center my-4'>No Bookmark Notes Found</p>}
 
         <Masonry
           className="flex justify-between gap-2 sm:w-full lg:w-[95%] lg:mx-auto px-3 py-4 rounded"
           breakpointCols={breakpointColumnsObj}
         >
-          {notes && notes.map((note) => (
+          {bookmarks && bookmarks.map((note) => (
             <Note key={note._id} {...note} />
           ))}
 

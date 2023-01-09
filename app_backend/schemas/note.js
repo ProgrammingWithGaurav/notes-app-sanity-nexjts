@@ -36,5 +36,11 @@ export default {
       title: 'PostedBy', 
       type: 'postedBy'
   },
+  {
+    name: 'bookmark',
+    title: 'Bookmark',
+    type: 'boolean',
+    default: false
+  }
   ],
 }
