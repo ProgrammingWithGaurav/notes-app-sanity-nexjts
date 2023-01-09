@@ -6,7 +6,7 @@ import {useRouter} from 'next/router';
 import Head from 'next/head';
 
 
-const login = () => {
+const Login = () => {
       const router = useRouter();
       const handleLogin = () => {
          signInWithPopup(auth, provider).then((user) => {
@@ -44,4 +44,4 @@ const login = () => {
     )
 }
 
-export default login
+export default Login

@@ -22,10 +22,12 @@ export default function Note({
   const { notes, setNotes ,loading, setLoading} = useStateContext();
   const [postHovered, setPostHovered] = useState(false);
   const [isBookmark, setIsBookmark] = useState(bookmark);
+
+  
   const deleteNote = () => {
     client.delete(_id).then(() => {
       window.location.reload();
-    });
+    }).catch(e => console.log(e));
   };
 
   const bookmarkNote = () => {

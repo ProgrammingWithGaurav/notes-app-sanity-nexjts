@@ -13,10 +13,7 @@ const Footer = () => {
       <div className="flex flex-wrap">
         <div className="w-full lg:w-2/5">
           <p className="text-gray-600 hidden lg:block mt-4 p-0 lg:pr-12">
-            Boisterous he on understood attachment as entreaties ye devonshire.
-            In mile an form snug were been sell. Extremely ham any his departure
-            for contained curiosity defective. Way now instrument had eat
-            diminution melancholy expression sentiments stimulated.
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reprehenderit nulla iste voluptas hic consequatur dolorem quam nisi molestias enim, iure accusantium voluptatibus autem sapiente in repellendus molestiae id, natus quibusdam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam, perspiciatis laboriosam fugit quidem qui soluta hic ex. Ipsam, adipisci eveniet.
           </p>
         </div>
 
