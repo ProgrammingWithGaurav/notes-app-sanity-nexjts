@@ -6,7 +6,7 @@ import Masonry from "react-masonry-css";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Spinner from "../components/Spinner";
-import { useStateContext } from "./context/NoteContext";
+import { useStateContext } from "../context/NoteContext";
 import Note from "../components/Note";
 import { useState } from "react";
 import {client} from '../client';
@@ -41,7 +41,7 @@ export default function Home() {
       const User = localStorage.getItem('user') !== 'undefined' ? JSON.parse(localStorage.getItem('user')) : localStorage.clear();
 
     if (!User) router.push('/login');
-  }, []);
+  });
 
 
   useEffect(() => {;

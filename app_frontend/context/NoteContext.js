@@ -2,7 +2,7 @@ import { useContext, createContext , useState} from "react";
 
 export const NoteContext = createContext();
 
-export const NoteProvider = ({ children }) => {
+const NoteProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
   const [searchString, setSearchString] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,4 +16,5 @@ export const NoteProvider = ({ children }) => {
   );
 };
 
+export default NoteProvider;
 export const useStateContext = () => useContext(NoteContext);

@@ -2,7 +2,7 @@ import { ArrowRightIcon, BookmarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { client } from "../client";
-import { useStateContext } from "../pages/context/NoteContext";
+import { useStateContext } from "../context/NoteContext";
 import {
   BookmarkIcon as ActiveBookMarkIcon,
   TrashIcon,

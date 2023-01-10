@@ -2,10 +2,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { BookmarkIcon, MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
-import { useStateContext } from "../pages/context/NoteContext";
 import {signOut} from 'firebase/auth';
 import {auth} from '../firebase';
 import { ArrowLeftOnRectangleIcon } from "@heroicons/react/24/outline";
+import { useStateContext } from "../context/NoteContext";
 
 const Header = () => {
   const [input, setInput] = useState("");

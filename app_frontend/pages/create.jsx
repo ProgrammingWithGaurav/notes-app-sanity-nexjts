@@ -25,7 +25,7 @@ const categories = [
   },
 ];
 
-const create = () => {
+const Create = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -160,7 +160,6 @@ const create = () => {
           onChange={(e) => setDescription(e.target.value)}
         />
 
-
         <div>
           <p className="mb-2 font-semibold text:lg sm:text-xl">
             Choose Pin Category
@@ -176,6 +175,7 @@ const create = () => {
             </option>
             {categories.map((item) => (
               <option
+                key={item}
                 className="text-base border-0 outline-none capitalize bg-white text-black "
                 value={item.name}
               >
@@ -255,4 +255,4 @@ const create = () => {
   );
 };
 
-export default create;
+export default Create;
